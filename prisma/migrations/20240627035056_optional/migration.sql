@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Movie" ALTER COLUMN "country" DROP NOT NULL,
+ALTER COLUMN "length" DROP NOT NULL;

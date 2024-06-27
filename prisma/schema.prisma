@@ -1,0 +1,36 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Movie {
+  id      Int     @id @default(autoincrement())
+  title   String
+  year    String
+  country String?
+  length  Int?
+
+  isFavourite   Boolean      @default(false)
+  isWatchlisted Boolean      @default(false)
+  tmdbId        Int?         @unique
+  MovieGenre    MovieGenre[]
+}
+
+model Genre {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  MovieGenre MovieGenre[]
+}
+
+model MovieGenre {
+  id      Int   @id @default(autoincrement())
+  genreId Int
+  genre   Genre @relation(fields: [genreId], references: [id])
+  movieId Int
+  movie   Movie @relation(fields: [movieId], references: [id])
+}

@@ -1,0 +1,3 @@
+type genre = {
+  name: string;
+};
