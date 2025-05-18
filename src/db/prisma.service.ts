@@ -13,7 +13,7 @@ export class PrismaService
         db: {
           url:
             configService.get('DATABASE_URL') ??
-            'postgresql://neondb_owner:bU72tdScmnFR@ep-falling-wind-a6vk1q59-pooler.us-west-2.aws.neon.tech/neondb?sslmode=require',
+            'postgresql://node_owner:RaC0F1yVtNrw@ep-falling-unit-a2d9rzs9-pooler.eu-central-1.aws.neon.tech/node?sslmode=require',
         },
       },
     });

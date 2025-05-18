@@ -1,11 +1,11 @@
-type movie = {
+export type movie = {
   title: string;
   country: string;
   year: string;
   length: number;
   tmdbId?: string;
 };
-type movieQueyFields = {
+export type movieQueyFields = {
   page: string;
   pageSize: string;
   title?: string;
@@ -15,7 +15,7 @@ type movieQueyFields = {
   tmdbId?: string;
   genreName?: string;
 };
-type movieMarkAs = {
+export type movieMarkAs = {
   isWatchlisted?: boolean;
   isFavourite?: boolean;
 };

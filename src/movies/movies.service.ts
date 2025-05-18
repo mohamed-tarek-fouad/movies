@@ -3,14 +3,16 @@ import * as fs from 'fs';
 import * as csvParser from 'csv-parser';
 import { PrismaService } from 'src/db/prisma.service';
 import { genres } from 'src/utils/genersInIMDB';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
+// import { CACHE_MANAGER } from '@nestjs/cache-manager';
+// import { Cache } from 'cache-manager';
 import axios from 'axios';
+import { movieMarkAs, movieQueyFields } from 'src/utils/types/movie';
+import { CreateMovieDto } from './dtos/createMovie.dto';
 @Injectable()
 export class MoviesService {
   constructor(
     private prisma: PrismaService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async seedDatabase() {
@@ -91,15 +93,15 @@ export class MoviesService {
         year,
         genreName,
       } = query;
-      const isCached: object = await this.cacheManager.get(
-        `${page}${pageSize}${country}${length}${title}${tmdbId}${year}${genreName}`,
-      );
-      if (isCached) {
-        return {
-          data: isCached,
-          message: 'retrieved all books successfully',
-        };
-      }
+      // const isCached: object = await this.cacheManager.get(
+      //   `${page}${pageSize}${country}${length}${title}${tmdbId}${year}${genreName}`,
+      // );
+      // if (isCached) {
+      //   return {
+      //     data: isCached,
+      //     message: 'retrieved all books successfully',
+      //   };
+      // }
       const skip = (+page - 1) * +pageSize;
       const take = +pageSize;
       const genre = genreName
@@ -132,11 +134,11 @@ export class MoviesService {
         movies = await this.requestMovieSearch(title, year);
         return { data: movies, message: 'success' };
       }
-      await this.cacheManager.set(
-        `${page}${pageSize}${country}${length}${title}${tmdbId}${year}${genreName}`,
-        movies,
-        60000,
-      );
+      // await this.cacheManager.set(
+      //   `${page}${pageSize}${country}${length}${title}${tmdbId}${year}${genreName}`,
+      //   movies,
+      //   60000,
+      // );
       return { data: movies, message: 'success' };
     } catch (error) {
       console.log(error);
@@ -235,13 +237,13 @@ export class MoviesService {
     return mapedData;
   }
   async recommendation() {
-    const isCached: object = await this.cacheManager.get(`recommendation`);
-    if (isCached) {
-      return {
-        data: isCached,
-        message: 'retrieved all books successfully',
-      };
-    }
+    // const isCached: object = await this.cacheManager.get(`recommendation`);
+    // if (isCached) {
+    //   return {
+    //     data: isCached,
+    //     message: 'retrieved all books successfully',
+    //   };
+    // }
     try {
       const favouritedMovies = await this.prisma.movie.findMany({
         where: { isFavourite: true },
@@ -275,14 +277,20 @@ export class MoviesService {
           recommendationResult = [...recommendationResult, ...mapedData];
         }
       }
-      await this.cacheManager.set(
-        `recommendation`,
-        recommendationResult,
-        60000,
-      );
+      // await this.cacheManager.set(
+      //   `recommendation`,
+      //   recommendationResult,
+      //   60000,
+      // );
       return { data: recommendationResult, message: 'success' };
     } catch (error) {
       throw error;
     }
+  }
+  async createMovie(data: CreateMovieDto) {
+    const result = await this.prisma.movie.create({
+      data,
+    });
+    return result;
   }
 }

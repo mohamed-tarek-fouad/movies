@@ -9,13 +9,13 @@ import { CacheModule } from '@nestjs/cache-manager';
   imports: [
     PrismaModule,
     MoviesModule,
-    CacheModule.register({
-      isGlobal: true,
-      store: CacheStore,
-      host: 'redis',
-      port: process.env.REDIS,
-      ttl: 60 * 60 * 6,
-    }),
+    // CacheModule.register({
+    //   isGlobal: true,
+    //   store: CacheStore,
+    //   host: 'redis',
+    //   port: process.env.REDIS,
+    //   ttl: 60 * 60 * 6,
+    // }),
   ],
   controllers: [AppController],
   providers: [AppService],
